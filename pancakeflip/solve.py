@@ -1,7 +1,7 @@
 import pdb
 import re
 
-filepath = 'A-small-practice.in'
+filepath = 'A-large-practice.in'
 output = open('output.txt', 'w')
 ans = []
 regex = re.compile(r'(-)+')
@@ -61,25 +61,41 @@ def is_block_minus(S, K):
     else:
         return True
 
-def flips_cnt(S, K, count = None):
-    if count is None:
-        count = 0
+def check(S, K, m):
+    finished = False
+    count = m
 
     if is_positive(S):
-        return count
+        finished = True
     elif is_negative(S) and K == 1:
-        return len(S) + count
+        count += len(S)
+        finished = True
     elif is_negative(S) and len(S) <= K:
-        return 1 + count
+        count += 1
+        finished = True
     elif is_negative(S) and len(S) > K and len(S) % K == 0:
-        return len(S)/K + count
+        count = len(S)/K + count
+        finished = True
     elif is_negative(S) and len(S) > K and len(S) % K != 0:
-        return -1
+        count = -1
+        finished = True
     elif lone_minus_cnt(S) == 1 and is_block_minus(S, K):
-        return -1
-    else:
-        S = transf(S, transf_pos(S), K)
-        return flips_cnt(S, K, count + 1)
+        count = -1
+        finished = True
+
+    return (finished, count)
+
+def flips_cnt(S, K):
+    finished = False
+    count = 0
+
+    while finished == False:
+        finished, count = check(S, K, count)
+        if finished == False:
+            S = transf(S, transf_pos(S), K)
+            count += 1
+
+    return count
 
 def formatted_flips_cnt(i, n):
     res = int(n)
