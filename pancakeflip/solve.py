@@ -1,7 +1,7 @@
 import pdb
 import re
 
-filepath = 'A-large-practice.in'
+filepath = 'A-small-practice.in'
 output = open('output.txt', 'w')
 ans = []
 regex = re.compile(r'(-)+')
